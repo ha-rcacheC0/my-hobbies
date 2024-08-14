@@ -8,29 +8,42 @@ const rs = require('readline-sync');
 // print user hobby list at the end
 
 let hobbies = [];
+let areYouSure = false;
+let moreHobbies = 0;
 
-let username = rs.question('What is your name? ');
-let favHobby = rs.question(`Hello ${username}! What is your favorite hobby? `);
+const getHobbyCount = () => moreHobbies = rs.questionInt(`${favoriteHobby} is fun! How many other hobbies do you have? `);
 
-hobbies.push(favHobby);
-
-let moreHobbies = rs.questionInt(`${favHobby} is fun! How many other hobbies do you have? `);
-
-if (moreHobbies > 0) {
+const addHobbies = (numberOfHobbies) => {
   let counter = 0;
-  while(counter < moreHobbies) {
+  while(counter < numberOfHobbies) {
     let input = rs.prompt();
     hobbies.push(input);
     counter++;
-
-    if (counter < moreHobbies) {
-      console.log(`Awesome ${input} is cool! What's the other ${moreHobbies - counter}?`);
+    if (counter < numberOfHobbies) {
+      console.log(`Awesome ${input} is cool! What's the other ${numberOfHobbies - counter}?`);
     } else {
-      console.log(`I wish I could do ${hobbies}... but I'm not even real.`)
+      console.log(`I wish I could do ${hobbies}... but I'm not even real. I'm only a prompt written by Lucas Keller.`);
     }
   }
-} else {
-  let areYouSure = rs.keyInYN(`Are you sure ${hobbies[0]} is all that you like to do? `);
 }
 
-// console.log(hobbies);
+let username = rs.question('What is your name? ');
+let favoriteHobby = rs.question(`Hello ${username}! What is your favorite hobby? `);
+
+hobbies.push(favoriteHobby);
+getHobbyCount();
+
+if (moreHobbies > 0) {
+  console.log(`Cool, what are they? `)
+  addHobbies(moreHobbies);
+} else {
+  areYouSure = rs.keyInYN(`Are you sure ${hobbies[0]} is all that you like to do? `);
+}
+
+if (!areYouSure && hobbies.length <= 1) {
+  getHobbyCount();
+  console.log(`Cool, what are they? `)
+  addHobbies(moreHobbies);
+} else if (areYouSure) {
+  console.log(`${hobbies} is cool, good for you!`)
+}
